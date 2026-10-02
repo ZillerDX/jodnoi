@@ -1,0 +1,56 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'IBM Plex Sans Thai', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --color-bg: #f6f6f4;
+  --color-surface: #ffffff;
+  --color-ink: #16181d;
+  --color-muted: #7b8089;
+  --color-line: #e7e7e3;
+  --color-income: #16a34a;
+  --color-expense: #e11d48;
+  --color-accent: #16181d;
+  --color-accent-ink: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0e0f12;
+    --color-surface: #17191e;
+    --color-ink: #f2f2f0;
+    --color-muted: #8b9099;
+    --color-line: #262930;
+    --color-income: #4ade80;
+    --color-expense: #fb7185;
+    --color-accent: #f2f2f0;
+    --color-accent-ink: #0e0f12;
+  }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+input {
+  font-family: inherit;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
