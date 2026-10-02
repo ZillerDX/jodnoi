@@ -12,6 +12,7 @@ React 19 + Vite + TypeScript (strict) + Tailwind v4 + Dexie (IndexedDB) + Rechar
 - Lint: `npm run lint` (oxlint)
 - Test: `npm test` (vitest run)
 - Preview built PWA: `npm run preview`
+- Deploy: `npm run deploy` (needs `npx wrangler login` once). Hosted as a Cloudflare Worker with static assets (`wrangler.jsonc`), live at https://jodnoi.jodnoi.workers.dev. Wrangler's `pages` commands now delegate to Workers, so do not use `wrangler pages`.
 
 ## Architecture
 - `src/lib/` pure logic, no React/DB: types, money (satang), dates, summary (+ tests).

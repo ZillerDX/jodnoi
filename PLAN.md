@@ -9,7 +9,7 @@ Goal: record income/expense in <= 3 taps, custom categories, dashboard with date
 - [x] 4. History grouped by day, edit/delete with Undo. Code done; not yet clicked through manually.
 - [x] 5. Dashboard: totals, category donut, daily bars, range presets + custom range (default current month). Verified totals + donut list render; custom range / charts visuals not yet eyeballed.
 - [x] 6. Export/Import JSON + CSV, PWA manifest/service worker/install button, storage.persist. Build generates sw.js + manifest; install flow and import NOT yet tested on a device.
-- [ ] 7. UI polish, mobile check, deploy (Cloudflare Pages).
+- [x] 7. Deploy: Cloudflare Workers static assets at https://jodnoi.jodnoi.workers.dev (GitHub: ZillerDX/jodnoi, public). UI polish ongoing from user feedback.
 
 ## Feature: multiple accounts (approved)
 Decisions: view one account at a time (no "all"); first account is named "บัญชีเริ่มต้น"; last selected account is remembered across app opens (localStorage `activeAccountId`); categories shared across accounts; no transfers / opening balance yet.
@@ -32,4 +32,4 @@ Rules: cannot delete/hide the last visible account; deleting an account with tra
 - Satang integers, `YYYY-MM-DD` date strings, UUID ids (see CLAUDE.md).
 
 ## Next
-User tries accounts on localhost/phone (dev server: `npm run dev -- --host`, http://192.168.1.240:5173) and reports UX fixes. Before opening the new version on a device that holds real data, export a JSON backup first (schema v2 upgrade is one-way). Then: click through JSON export/import round trip, then deploy to Cloudflare Pages only after the user confirms. Known: oxlint react-purity warnings for `new Date()` in render (benign); bundle ~710 kB (recharts) could be code-split.
+Verify the live site over HTTPS on a phone: install via the in-app "ติดตั้ง" button (Android Chrome) or Add to Home Screen (iOS), check offline mode and that the install-success screen shows. Redeploy after changes with `npm run deploy`. Ideas (user-driven): transfers between accounts, opening balance, monthly budgets, recurring items.
