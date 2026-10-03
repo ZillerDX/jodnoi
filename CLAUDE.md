@@ -30,6 +30,12 @@ React 19 + Vite + TypeScript (strict) + Tailwind v4 + Dexie (IndexedDB) + Rechar
 - Deleting a category must not delete transactions (archive instead; summary falls back to "ไม่ระบุหมวด").
 - UI language: Thai only. Minimal style, dark mode supported.
 
+## PWA / branding
+- Updates are prompt-style: `registerType: 'prompt'`; `src/lib/updatePrompt.ts` + `<UpdateBanner />` ask the user, then `applyUpdate()` reloads. It re-checks every 30 min and when the app returns to the foreground. Never switch back to silent autoUpdate (could reload mid-entry).
+- Install button logic: `src/lib/installPrompt.ts` captures `beforeinstallprompt` at load (must be imported first in main.tsx).
+- Brand assets are generated from `public/mascot.svg` by `python scripts/build-brand-assets.py` (icons, avatar, mini mascot poses in `src/components/mascotBust.ts`). Edit the script/mascot, then re-render PNGs with the sharp-cli commands in the script header. Do not hand-edit generated files.
+- Manifest colors: background_color `#f4f1ff` must match the flat background of `public/icon-maskable.svg` and the boot screen in `index.html`.
+
 ## Gotchas
 - Product name is Jodnoi, but the IndexedDB name stays `expense-tracker` and localStorage key `activeAccountId` stays: renaming them would orphan existing users' data.
 - License is source-available, non-commercial, no-derivatives (see LICENSE); keep the header text in README/LICENSE consistent.
