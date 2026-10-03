@@ -1,10 +1,16 @@
 import { useState } from 'react'
 import { useInstall } from '../lib/useInstall'
+import MiniMascot from './MiniMascot'
+import type { Pose } from './mascotBust'
 import Modal from './Modal'
 
-const BENEFITS = ['เปิดเร็วจากไอคอนบนหน้าจอโฮม', 'ใช้ได้แม้ไม่มีอินเทอร์เน็ต', 'ข้อมูลอยู่ในเครื่องคุณ ไม่ต้องสมัครสมาชิก']
+const PERKS: { pose: Pose; text: string }[] = [
+  { pose: 'fast', text: 'จดเสร็จใน 3 แตะ ไม่ต้องรอโหลด' },
+  { pose: 'offline', text: 'ไม่มีเน็ตก็จดได้ ข้อมูลอยู่ในเครื่องคุณ' },
+  { pose: 'free', text: 'ไม่ต้องสมัคร ไม่มีโฆษณา' },
+]
 
-type View = 'offer' | 'manual' | 'done'
+type View = 'offer' | 'help' | 'done'
 
 /** "ติดตั้ง" button for the header + the install popup. Hidden once the app runs installed. */
 export default function InstallButton() {
@@ -13,7 +19,7 @@ export default function InstallButton() {
   const [view, setView] = useState<View>('offer')
   const [busy, setBusy] = useState(false)
 
-  // Keep the popup on the success screen even though `installed` flips to true underneath it.
+  // Stay mounted while the popup is open so the success screen can show after `installed` flips.
   if (installed && !open) return null
 
   const close = () => {
@@ -22,15 +28,16 @@ export default function InstallButton() {
   }
 
   async function onInstall() {
-    if (!canPrompt) return setView('manual')
+    // Browsers that can install natively hand us the event: one tap, no manual steps.
+    if (!canPrompt) return setView('help')
     setBusy(true)
     try {
       const outcome = await install()
       if (outcome === 'accepted') setView('done')
-      else if (outcome === 'unavailable') setView('manual')
+      else if (outcome === 'unavailable') setView('help')
     } catch (err) {
       console.error('install failed', err)
-      setView('manual')
+      setView('help')
     } finally {
       setBusy(false)
     }
@@ -51,39 +58,45 @@ export default function InstallButton() {
       )}
 
       {open && (
-        <Modal title={view === 'done' ? 'ติดตั้งเสร็จแล้ว' : 'ติดตั้ง Jodnoi'} onClose={close}>
+        <Modal title={view === 'done' ? 'พร้อมจดแล้ว' : 'ติดตั้ง Jodnoi'} onClose={close}>
           <div className="space-y-4 text-center">
             {view === 'done' ? (
               <>
-                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-income/15 text-4xl text-income">✓</div>
-                <p className="text-sm text-muted">เปิด Jodnoi จากไอคอนบนหน้าจอโฮมได้เลย หรือใช้งานต่อจากหน้านี้</p>
-                <button onClick={close} className="w-full rounded-2xl bg-accent py-3.5 text-base font-semibold text-accent-ink">เริ่มใช้งาน</button>
+                <img src="/mascot.svg" alt="" aria-hidden="true" className="mx-auto h-36 w-36 object-contain" />
+                <div>
+                  <p className="text-lg font-semibold">Jodnoi อยู่บนหน้าจอโฮมแล้ว</p>
+                  <p className="mt-1 text-sm text-muted">แตะไอคอนเมื่อไรก็จดได้เลย อย่าลืมจดนะ!</p>
+                </div>
+                <button onClick={close} className="w-full rounded-2xl bg-accent py-3.5 text-base font-semibold text-accent-ink">เริ่มจดเลย</button>
               </>
             ) : (
               <>
-                <img src="/icon-192.png" alt="" className="mx-auto h-20 w-20 rounded-3xl" />
-                <p className="text-sm text-muted">ใช้งานเต็มจอเหมือนแอปทั่วไป เปิดจากไอคอนบนหน้าจอโฮมได้ทันที</p>
+                <img src="/mascot.svg" alt="" aria-hidden="true" className="mx-auto h-36 w-36 object-contain" />
+                <div>
+                  <p className="text-lg font-semibold">ให้ Jodnoi อยู่ใกล้มือ</p>
+                  <p className="mt-1 text-sm text-muted">แตะไอคอนเดียว จดรายรับรายจ่ายก่อนลืม</p>
+                </div>
                 <ul className="space-y-2 text-left text-sm">
-                  {BENEFITS.map((b) => (
-                    <li key={b} className="flex items-center gap-3 rounded-xl bg-bg px-4 py-3">
-                      <span className="text-income">✓</span>
-                      {b}
+                  {PERKS.map((p) => (
+                    <li key={p.text} className="flex items-center gap-3">
+                      <MiniMascot pose={p.pose} />
+                      <span className="font-medium">{p.text}</span>
                     </li>
                   ))}
                 </ul>
-                {view === 'manual' && (
+                {view === 'help' && (
                   <p role="status" className="rounded-xl border border-line px-4 py-3 text-left text-sm">
                     {isIos
-                      ? 'บน iPhone/iPad: กดปุ่มแชร์ใน Safari แล้วเลือก “เพิ่มไปยังหน้าจอโฮม”'
-                      : 'เบราว์เซอร์นี้ไม่เปิดหน้าต่างติดตั้งให้อัตโนมัติ ให้เปิดเมนูของเบราว์เซอร์ แล้วเลือก “ติดตั้งแอป” หรือ “เพิ่มไปยังหน้าจอโฮม” (ต้องเปิดผ่าน HTTPS)'}
+                      ? 'iPhone/iPad ไม่อนุญาตให้ติดตั้งด้วยปุ่ม: กดปุ่มแชร์ใน Safari แล้วเลือก “เพิ่มไปยังหน้าจอโฮม” (ทำครั้งเดียว)'
+                      : 'เบราว์เซอร์นี้ยังติดตั้งให้อัตโนมัติไม่ได้ ลองเปิดหน้านี้ด้วย Chrome หรือ Edge แล้วกดปุ่มอีกครั้ง'}
                   </p>
                 )}
                 <button
                   onClick={onInstall}
                   disabled={busy}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3.5 text-base font-semibold text-accent-ink disabled:opacity-60"
+                  className="w-full rounded-2xl bg-accent py-3.5 text-base font-semibold text-accent-ink disabled:opacity-60"
                 >
-                  ติดตั้งแอป
+                  ติดตั้งเลย
                 </button>
               </>
             )}

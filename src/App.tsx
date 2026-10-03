@@ -3,6 +3,7 @@ import { AccountProvider } from './components/AccountContext'
 import AccountSwitcher from './components/AccountSwitcher'
 import InstallButton from './components/InstallButton'
 import QuickAddSheet from './components/QuickAddSheet'
+import UpdateBanner from './components/UpdateBanner'
 import { restoreTransaction } from './db/repo'
 import { defaultRange, type RangeState } from './lib/range'
 import type { Transaction, TxType } from './lib/types'
@@ -42,6 +43,7 @@ function AppShell() {
         <AccountSwitcher onManage={() => setTab('settings')} />
         <InstallButton />
       </header>
+      <UpdateBanner />
       <main className="flex-1 overflow-y-auto pb-28">
         {tab === 'home' && <Home onAdd={(type) => setSheet({ type })} onEdit={(t) => setSheet({ type: t.type, editing: t })} />}
         {tab === 'history' && <History range={range} onRange={setRange} onEdit={(t) => setSheet({ type: t.type, editing: t })} />}
