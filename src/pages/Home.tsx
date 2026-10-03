@@ -39,9 +39,9 @@ export default function Home({ onAdd, onEdit }: { onAdd: (t: TxType) => void; on
   return (
     <div className="space-y-6 px-4 pt-6">
       <header className="relative">
-        <img src="/mascot.svg" alt="" aria-hidden="true" className="pointer-events-none absolute -top-2 right-0 h-24 w-24 object-contain" />
+        <img src="/avatar.svg" alt="" aria-hidden="true" width={64} height={64} className="pointer-events-none absolute top-0 right-0 h-16 w-16 rounded-full shadow-md ring-4 ring-surface" />
         <p className="text-sm text-muted">คงเหลือ {monthLabel}</p>
-        <p className={`tabular mt-1 text-5xl font-semibold tracking-tight ${s.balance < 0 ? 'text-expense' : ''}`}>
+        <p className={`tabular mt-1 pr-20 text-5xl leading-tight font-semibold tracking-tight ${s.balance < 0 ? 'text-expense' : ''}`}>
           {formatBaht(s.balance)}
         </p>
         <div className="mt-3 flex gap-5 text-sm">
