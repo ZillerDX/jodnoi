@@ -81,9 +81,9 @@ def round_badge(art):
     )
 
 
-# Maskable: flat background identical to manifest background_color (#f4f1ff) so the square merges
-# into the splash screen instead of showing as a tile.
-maskable = f'{HEAD}{TITLE}<rect width="512" height="512" fill="#f4f1ff"/>{icon_art}</svg>\n'
+# Maskable: flat white, identical to manifest background_color. Android draws the launch splash itself
+# (icon on a white square) and ignores our colours for that frame, so white makes it blend in.
+maskable = f'{HEAD}{TITLE}<rect width="512" height="512" fill="#ffffff"/>{icon_art}</svg>\n'
 any_icon = round_badge(icon_art)
 avatar = round_badge(avatar_art)
 for name, text in (
